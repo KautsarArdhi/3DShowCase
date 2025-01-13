@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AR Viewer</title>
-    <script src="https://cdn.jsdelivr.net/gh/jeromeetienne/ar.js/aframe/build/aframe-ar.min.js"></script>
     <style>
         body {
             margin: 0;
@@ -98,12 +97,6 @@
         #ar-container {
             width: 100%;
             height: calc(100vh - 100px);
-            position: relative;
-        }
-
-        a-scene {
-            width: 100%;
-            height: 100%;
         }
     </style>
 </head>
@@ -131,16 +124,6 @@
 
         <input type="radio" name="model-switch" id="model4">
         <label for="model4"><img src="../assets/4d7e9b85-2fa4-48ac-be84-664be8ebd968.png" alt="Model 4"></label>
-    </div>
-
-    <div id="ar-container">
-        <a-scene embedded arjs>
-            <a-assets>
-                <a-asset-item id="current-model" src="../assets/game_ready_boot/sneaker4.gltf"></a-asset-item>
-            </a-assets>
-            <a-entity gltf-model="#current-model" position="0 0 0" scale="1 1 1"></a-entity>
-            <a-camera position="0 0 0" look-controls></a-camera>
-        </a-scene>
     </div>
 
     <script>
@@ -171,13 +154,8 @@
         };
 
         function loadModel() {
-            const scene = document.querySelector('a-scene');
-            const modelEntity = scene.querySelector('a-entity[gltf-model]');
-            const modelAsset = document.getElementById('current-model');
-
-            modelAsset.setAttribute('src', modelData[currentModel]);
-            modelEntity.setAttribute('gltf-model', `#current-model`);
-            console.log(`Model updated to: ${modelData[currentModel]}`);
+            console.log(`Loading model: ${modelData[currentModel]}`);
+            // Implementasikan logika integrasi AR.js di sini untuk mengganti model dalam AR
         }
 
         function goTo3D() {
