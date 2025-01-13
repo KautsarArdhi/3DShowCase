@@ -1,0 +1,377 @@
+{
+  "accessors": [
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 3422,
+      "max": [
+        171.40335083007813,
+        121.4857177734375,
+        53.604244232177734
+      ],
+      "min": [
+        -83.02134704589844,
+        8.028790473937988,
+        -184.783447265625
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 41064,
+      "componentType": 5126,
+      "count": 3422,
+      "max": [
+        0.9989528059959412,
+        0.9888345003128052,
+        0.9997152090072632
+      ],
+      "min": [
+        -0.9977796077728271,
+        -0.9924896359443665,
+        -0.9999794363975525
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5126,
+      "count": 3422,
+      "max": [
+        0.9982417821884155,
+        0.999076247215271,
+        0.9990194439888,
+        1.0
+      ],
+      "min": [
+        -0.9999932646751404,
+        -0.9999904036521912,
+        -0.997134804725647,
+        -1.0
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 3422,
+      "max": [
+        0.9941409826278687,
+        0.9973329901695251
+      ],
+      "min": [
+        0.006792000029236078,
+        0.004476000089198351
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 16980,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 82128,
+      "componentType": 5126,
+      "count": 409,
+      "max": [
+        167.0925750732422,
+        26.059444427490234,
+        49.574337005615234
+      ],
+      "min": [
+        -74.32878875732422,
+        -0.42382100224494934,
+        -178.8349151611328
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 87036,
+      "componentType": 5126,
+      "count": 409,
+      "max": [
+        0.9885516166687012,
+        0.6740216016769409,
+        0.9984049201011658
+      ],
+      "min": [
+        -0.990411102771759,
+        -0.9999988675117493,
+        -0.9934203028678894
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "byteOffset": 54752,
+      "componentType": 5126,
+      "count": 409,
+      "max": [
+        0.5919032692909241,
+        0.9986767172813416,
+        0.9211653470993042,
+        1.0
+      ],
+      "min": [
+        -0.8946184515953064,
+        -0.9915024638175964,
+        -0.42365264892578125,
+        1.0
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 27376,
+      "componentType": 5126,
+      "count": 409,
+      "max": [
+        0.5275070071220398,
+        0.9581969976425171
+      ],
+      "min": [
+        0.2630009949207306,
+        0.36224499344825745
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 67920,
+      "componentType": 5125,
+      "count": 2256,
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "skywellcgi (https://sketchfab.com/skywellcgi)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/shoes-941f63bfc76c4560af34c4914443f5ab",
+      "title": "shoes"
+    },
+    "generator": "Sketchfab-12.66.0",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 76944,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 30648,
+      "byteOffset": 76944,
+      "byteStride": 8,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 91944,
+      "byteOffset": 107592,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 61296,
+      "byteOffset": 199536,
+      "byteStride": 16,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 260832,
+      "uri": "scene.bin"
+    }
+  ],
+  "images": [
+    {
+      "uri": "textures/lambert1_baseColor.png"
+    },
+    {
+      "uri": "textures/lambert1_metallicRoughness.png"
+    },
+    {
+      "uri": "textures/lambert1_normal.png"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "emissiveTexture": {
+        "index": 0
+      },
+      "name": "lambert1",
+      "normalTexture": {
+        "index": 2
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicRoughnessTexture": {
+          "index": 1
+        }
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "sneakers_2_low_poly3:sneakers_2_low_poly_lambert1_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0,
+            "TANGENT": 2,
+            "TEXCOORD_0": 3
+          },
+          "indices": 4,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "sneakers_2_low_poly3:solle1_lambert1_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 6,
+            "POSITION": 5,
+            "TANGENT": 7,
+            "TEXCOORD_0": 8
+          },
+          "indices": 9,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.220446049250313e-16,
+        -1.0,
+        0.0,
+        0.0,
+        1.0,
+        2.220446049250313e-16,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "Sketchfab_model"
+    },
+    {
+      "children": [
+        2
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        -1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "a231af2eb4da462dafb20342a38b8292.fbx"
+    },
+    {
+      "children": [
+        3
+      ],
+      "name": "RootNode"
+    },
+    {
+      "children": [
+        4,
+        6
+      ],
+      "name": "group"
+    },
+    {
+      "children": [
+        5
+      ],
+      "name": "sneakers_2_low_poly3:sneakers_2_low_poly"
+    },
+    {
+      "mesh": 0,
+      "name": "sneakers_2_low_poly3:sneakers_2_low_poly_lambert1_0"
+    },
+    {
+      "children": [
+        7
+      ],
+      "name": "sneakers_2_low_poly3:solle1"
+    },
+    {
+      "mesh": 1,
+      "name": "sneakers_2_low_poly3:solle1_lambert1_0"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987,
+      "wrapS": 10497,
+      "wrapT": 10497
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Sketchfab_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "sampler": 0,
+      "source": 1
+    },
+    {
+      "sampler": 0,
+      "source": 2
+    }
+  ]
+}

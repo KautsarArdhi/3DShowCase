@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR Viewer</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        #top-buttons {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toggle-switch {
+            display: flex;
+            align-items: center;
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background-color: #FF6666;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+
+        .toggle-switch .toggle-circle {
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            background-color: #FFF;
+            border-radius: 50%;
+            top: 2px;
+            left: 32px;
+            transition: left 0.3s;
+        }
+
+        .toggle-switch.inactive {
+            background-color: #f4f4f4;
+        }
+
+        .toggle-switch.inactive .toggle-circle {
+            left: 2px;
+            background-color: #4CAF50;
+        }
+
+        .toggle-text {
+            font-size: 14px;
+            color: #000;
+            margin: 0 5px;
+        }
+
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        #controls label {
+            cursor: pointer;
+        }
+
+        #controls input[type="radio"] {
+            display: none;
+        }
+
+        #controls input[type="radio"]:checked + label {
+            border: 2px solid #000;
+            border-radius: 50%;
+        }
+
+        #controls img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        #ar-container {
+            width: 100%;
+            height: calc(100vh - 100px);
+        }
+    </style>
+</head>
+<body>
+    <div id="top-buttons">
+        <div class="toggle-text">3D</div>
+        <div id="toggle-switch" class="toggle-switch" onclick="goTo3D()">
+            <div class="toggle-circle"></div>
+        </div>
+        <div class="toggle-text">AR</div>
+    </div>
+
+    <h1>AR Viewer</h1>
+    <p>This is a placeholder for AR functionality.</p>
+
+    <div id="controls">
+        <input type="radio" name="model-switch" id="model1" checked>
+        <label for="model1"><img src="../assets/e8609c56-d7ae-4731-afbf-8346950febab.png" alt="Model 1"></label>
+
+        <input type="radio" name="model-switch" id="model2">
+        <label for="model2"><img src="../assets/9ad5a76c-3ec5-497f-92e6-5a0ec51cc29e.png" alt="Model 2"></label>
+
+        <input type="radio" name="model-switch" id="model3">
+        <label for="model3"><img src="../assets/c01e1ab5-f8b1-4c59-9abf-c2d741d10cd2.png" alt="Model 3"></label>
+
+        <input type="radio" name="model-switch" id="model4">
+        <label for="model4"><img src="../assets/4d7e9b85-2fa4-48ac-be84-664be8ebd968.png" alt="Model 4"></label>
+    </div>
+
+    <script>
+        const modelData = {
+            model1: '../assets/game_ready_boot/sneaker4.gltf',
+            model2: '../assets/shoes/sneaker3.gltf',
+            model3: '../assets/sneaker/sneaker2.gltf',
+            model4: '../assets/sneakerone/scene.gltf'
+        };
+
+        let currentModel = 'model1';
+
+        window.onload = () => {
+            const toggleSwitch = document.getElementById('toggle-switch');
+            toggleSwitch.classList.add('active');
+
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            if (!isMobile) {
+                alert("Halaman AR harus dibuka di perangkat smartphone untuk mencoba menggunakan kamera belakang.");
+            }
+
+            document.querySelectorAll('input[name="model-switch"]').forEach(input => {
+                input.addEventListener('change', (e) => {
+                    currentModel = e.target.id;
+                    loadModel();
+                });
+            });
+        };
+
+        function loadModel() {
+            console.log(`Loading model: ${modelData[currentModel]}`);
+            // Implementasikan logika integrasi AR.js di sini untuk mengganti model dalam AR
+        }
+
+        function goTo3D() {
+            window.location.href = "shoes.html";
+        }
+    </script>
+</body>
+</html>

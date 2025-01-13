@@ -3,39 +3,294 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>accesories</title>
+    <title>3D Model Viewer</title>
     <style>
-        .header {
-            background-color: #C9D6A6; /* Soft green for header background */
-            padding: 10px 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            text-align: left;
-        }
-
-        .header h1 {
-            color: #9B786F; /* Soft brown for header text */
+        body {
             margin: 0;
-            font-size: 1.5rem;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
-        .header a {
+        #model-container {
+            width: 100%;
+            height: calc(100vh - 160px);
+            background: #fff;
+            position: relative;
+        }
+
+        #details {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        #details h1 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        #details p {
+            margin: 5px 0 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        #controls {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            z-index: 3;
+        }
+
+        #controls label {
+            cursor: pointer;
+        }
+
+        #controls input[type="radio"] {
+            display: none;
+        }
+
+        #controls input[type="radio"]:checked + label {
+            border: 2px solid #000;
+            border-radius: 50%;
+        }
+
+        #controls img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        #top-buttons {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 4;
+        }
+
+        .toggle-switch {
+            display: flex;
+            align-items: center;
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background-color: #f4f4f4;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+
+        .toggle-switch .toggle-circle {
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            background-color: #4CAF50;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: left 0.3s;
+        }
+
+        .toggle-switch.active {
+            background-color: #FF6666;
+        }
+
+        .toggle-switch.active .toggle-circle {
+            left: 32px;
+            background-color: #FFF;
+        }
+
+        .toggle-text {
+            font-size: 14px;
+            color: #000;
+            margin: 0 5px;
+        }
+
+        .home-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            border: 2px solid #000;
+            border-radius: 15px;
+            padding: 5px 10px;
             text-decoration: none;
+            color: #000;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
         }
 
+        .home-button img {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        }
     </style>
+    <script type="module">
+        import * as THREE from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
+        import { GLTFLoader } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/GLTFLoader.js";
+        import { OrbitControls } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/controls/OrbitControls.js";
+
+        let scene, camera, renderer, controls;
+        const models = {};
+
+        const modelData = {
+            model1: { path: '../assets/sun_glasses/sunglass2.gltf', scale: [0.08, 0.08, 0.08], title: "Sunglass Model 1", description: "Description for Model 1" },
+            model2: { path: '../assets/sun_glasses_-_low_poly/sunglass3.gltf', scale: [2, 2, 2], title: "Sunglass Model 2", description: "Description for Model 2" },
+            model3: { path: '../assets/sunglasses/sunglass4.gltf', scale: [10, 10, 10], title: "Sunglass Model 3", description: "Description for Model 3" },
+            model4: { path: '../assets/cat_eye_glasses/sunglass1.gltf', scale: [40, 40, 40], title: "Sunglass Model 4", description: "Description for Model 4" }
+        };
+
+        function init() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ alpha: true });
+
+            const container = document.getElementById('model-container');
+            renderer.setSize(container.offsetWidth, container.offsetHeight);
+            container.appendChild(renderer.domElement);
+
+            const ambientLight = new THREE.AmbientLight(0x404040);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+            directionalLight.position.set(1, 1, 1);
+            scene.add(directionalLight);
+
+            controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+
+            camera.position.set(0, 2, 10);
+            camera.lookAt(0, 0, 0);
+
+            loadModel('model1');
+
+            window.addEventListener('resize', onWindowResize);
+            document.querySelectorAll('input[name="model-switch"]').forEach(input => {
+                input.addEventListener('change', (e) => {
+                    loadModel(e.target.id);
+                });
+            });
+
+            const toggleSwitch = document.getElementById('toggle-switch');
+            toggleSwitch.addEventListener('click', () => {
+                toggleSwitch.classList.toggle('active');
+                if (toggleSwitch.classList.contains('active')) {
+                    window.location.href = "ar_page.html";
+                }
+            });
+
+            const homeButton = document.querySelector('.home-button');
+            homeButton.addEventListener('click', () => {
+                window.location.href = "../homepage/index.html";
+            });
+        }
+
+        function loadModel(modelKey) {
+            Object.values(models).forEach(model => {
+                scene.remove(model);
+            });
+
+            if (!models[modelKey]) {
+                const { path, scale, title, description } = modelData[modelKey];
+                const loader = new GLTFLoader();
+                loader.load(
+                    path,
+                    (gltf) => {
+                        const model = gltf.scene;
+                        model.scale.set(...scale);
+                        model.rotation.y = Math.PI;
+                        models[modelKey] = model;
+                        scene.add(model);
+                    },
+                    undefined,
+                    (error) => console.error('Error loading model:', error)
+                );
+            } else {
+                scene.add(models[modelKey]);
+            }
+
+            const details = document.getElementById('details');
+            details.querySelector('h1').textContent = modelData[modelKey].title;
+            details.querySelector('p').textContent = modelData[modelKey].description;
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            Object.values(models).forEach(model => {
+                if (scene.children.includes(model)) {
+                    model.rotation.y += 0.01;
+                }
+            });
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        init();
+        animate();
+    </script>
 </head>
 <body>
-    <header class="header">
-        <a href="../homepage/index.html">
-            <h1>Netmarks Showcase</h1>
-        </a>
-    </header>
+    <a href="../homepage/index.html" class="home-button">
+        <img src="../assets/home_icon.png" alt="Home">
+        Home
+    </a>
 
+    <div id="top-buttons">
+        <div class="toggle-text">3D</div>
+        <div id="toggle-switch" class="toggle-switch">
+            <div class="toggle-circle"></div>
+        </div>
+        <div class="toggle-text">AR</div>
+    </div>
 
+    <div id="model-container"></div>
+    <div id="details">
+        <h1>Nike Air Force 1 '07 - White/photo Blue</h1>
+        <p>3D Viewer Netmarks</p>
+    </div>
+    <div id="controls">
+        <input type="radio" name="model-switch" id="model1" checked>
+        <label for="model1"><img src="../assets/kacaone.jpg" alt="Model 1"></label>
 
+        <input type="radio" name="model-switch" id="model2">
+        <label for="model2"><img src="../assets/kacatu.jpg" alt="Model 2"></label>
+
+        <input type="radio" name="model-switch" id="model3">
+        <label for="model3"><img src="../assets/kacati.jpg" alt="Model 3"></label>
+
+        <input type="radio" name="model-switch" id="model4">
+        <label for="model4"><img src="../assets/kacapor.jpg" alt="Model 4"></label>
+    </div>
 </body>
 </html>

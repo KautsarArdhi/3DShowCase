@@ -1,0 +1,11 @@
+Model Information:
+* title:	Game Ready Boot
+* source:	https://sketchfab.com/3d-models/game-ready-boot-1a722e87eb344532abf6d9e0f34c8bf7
+* author:	Blue Spirit (https://sketchfab.com/Blue-Spirit)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Game Ready Boot" (https://sketchfab.com/3d-models/game-ready-boot-1a722e87eb344532abf6d9e0f34c8bf7) by Blue Spirit (https://sketchfab.com/Blue-Spirit) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

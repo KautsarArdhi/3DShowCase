@@ -1,0 +1,11 @@
+Model Information:
+* title:	shoes
+* source:	https://sketchfab.com/3d-models/shoes-941f63bfc76c4560af34c4914443f5ab
+* author:	skywellcgi (https://sketchfab.com/skywellcgi)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "shoes" (https://sketchfab.com/3d-models/shoes-941f63bfc76c4560af34c4914443f5ab) by skywellcgi (https://sketchfab.com/skywellcgi) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

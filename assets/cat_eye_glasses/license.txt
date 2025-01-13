@@ -1,0 +1,11 @@
+Model Information:
+* title:	Cat Eye Glasses
+* source:	https://sketchfab.com/3d-models/cat-eye-glasses-e7d56a10cf044262bd48bd054410cb29
+* author:	geenee (https://sketchfab.com/geeneear)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Cat Eye Glasses" (https://sketchfab.com/3d-models/cat-eye-glasses-e7d56a10cf044262bd48bd054410cb29) by geenee (https://sketchfab.com/geeneear) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
