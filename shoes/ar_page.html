@@ -114,15 +114,15 @@
 
     <a-scene embedded arjs>
         <!-- Kamera untuk AR -->
-        <a-camera position="0 0 0"></a-camera>
+        <a-camera position="0 1.5 5" look-controls="true"></a-camera>
 
         <!-- Pencahayaan untuk model -->
         <a-light type="point" position="0 4 4" intensity="1"></a-light>
 
         <!-- Model 3D yang akan dimuat -->
         <a-entity id="model" 
-                  gltf-model="../assets/sun_glasses/sunglass2.gltf" 
-                  scale="0.1 0.1 0.1" 
+                  gltf-model="#current-model" 
+                  scale="0.3 0.3 0.3" 
                   position="0 0 -2">
         </a-entity>
 
@@ -159,7 +159,7 @@
 
         document.querySelectorAll('input[name="model-switch"]').forEach(input => {
             input.addEventListener('change', (e) => {
-                const modelPath = modelPaths[e.target.id];
+                const modelPath = modelData[e.target.id];
                 const entity = document.querySelector('#model');
                 entity.setAttribute('gltf-model', modelPath);
             });
@@ -177,7 +177,6 @@
         // Simulasi pelacakan kaki (pengaturan placeholder untuk pelacakan lebih lanjut)
         const footTrackingEntity = document.querySelector('#foot-tracking');
         function updateFootTrackingPosition() {
-            // Logika pelacakan kaki placeholder
             footTrackingEntity.setAttribute('position', { x: 0, y: -1, z: -2 });
             console.log("Foot tracking updated.");
         }
