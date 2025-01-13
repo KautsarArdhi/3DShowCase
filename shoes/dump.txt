@@ -164,3 +164,228 @@
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AR Viewer</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/jeromeetienne/ar.js/aframe/build/aframe-ar.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        #top-buttons {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .toggle-switch {
+            display: flex;
+            align-items: center;
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background-color: #FF6666;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+
+        .toggle-switch .toggle-circle {
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            background-color: #FFF;
+            border-radius: 50%;
+            top: 2px;
+            left: 32px;
+            transition: left 0.3s;
+        }
+
+        .toggle-switch.inactive {
+            background-color: #f4f4f4;
+        }
+
+        .toggle-switch.inactive .toggle-circle {
+            left: 2px;
+            background-color: #4CAF50;
+        }
+
+        .toggle-text {
+            font-size: 14px;
+            color: #000;
+            margin: 0 5px;
+        }
+
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        #controls label {
+            cursor: pointer;
+        }
+
+        #controls input[type="radio"] {
+            display: none;
+        }
+
+        #controls input[type="radio"]:checked + label {
+            border: 2px solid #000;
+            border-radius: 50%;
+        }
+
+        #controls img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        a-scene {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="top-buttons">
+        <div class="toggle-text">3D</div>
+        <div id="toggle-switch" class="toggle-switch" onclick="goTo3D()">
+            <div class="toggle-circle"></div>
+        </div>
+        <div class="toggle-text">AR</div>
+    </div>
+
+    <a-scene embedded arjs>
+        <!-- Kamera untuk AR -->
+        <a-camera fov="90" position="0 1.5 5" look-controls="true"></a-camera>
+
+        <!-- Pencahayaan untuk model -->
+        <a-light type="point" position="0 4 4" intensity="1"></a-light>
+
+        <!-- Model 3D yang akan dimuat -->
+        <a-entity id="model" 
+                  gltf-model="#current-model" 
+                  scale="1.5 1.5 1.5" 
+                  position="0 0 -5">
+        </a-entity>
+
+        <!-- Entitas untuk pelacakan kaki (placeholder) -->
+        <a-entity id="foot-tracking" 
+                  geometry="primitive: plane; height: 1; width: 1" 
+                  material="color: #00ff00; opacity: 0.5" 
+                  position="0 -1 0">
+        </a-entity>
+    </a-scene>
+
+    <!-- Kontrol untuk mengganti model -->
+    <div id="controls">
+        <input type="radio" name="model-switch" id="model1" checked>
+        <label for="model1"><img src="../assets/e8609c56-d7ae-4731-afbf-8346950febab.png" alt="Model 1"></label>
+
+        <input type="radio" name="model-switch" id="model2">
+        <label for="model2"><img src="../assets/9ad5a76c-3ec5-497f-92e6-5a0ec51cc29e.png" alt="Model 2"></label>
+
+        <input type="radio" name="model-switch" id="model3">
+        <label for="model3"><img src="../assets/c01e1ab5-f8b1-4c59-9abf-c2d741d10cd2.png" alt="Model 3"></label>
+
+        <input type="radio" name="model-switch" id="model4">
+        <label for="model4"><img src="../assets/4d7e9b85-2fa4-48ac-be84-664be8ebd968.png" alt="Model 4"></label>
+    </div>
+
+    <script>
+        // Menentukan data model
+        const modelData = {
+            model1: { path: '../assets/game_ready_boot/sneaker4.gltf' },
+            model2: { path: '../assets/shoes/sneaker3.gltf' },
+            model3: { path: '../assets/sneaker/sneaker2.gltf' },
+            model4: { path: '../assets/sneakerone/scene.gltf' }
+        };
+
+        // Ganti model berdasarkan input radio button
+        document.querySelectorAll('input[name="model-switch"]').forEach(input => {
+            input.addEventListener('change', (e) => {
+                const modelPath = modelData[e.target.id].path;
+                const modelEntity = document.querySelector('#model');
+                modelEntity.setAttribute('gltf-model', modelPath);
+
+                // Panggil fungsi untuk menyesuaikan ukuran model
+                updateModelScale();
+            });
+        });
+
+        // Placeholder untuk mendapatkan panjang kaki
+        function getFootLengthFromTracking() {
+            // Simulasi panjang kaki (25 cm)
+            return 25;
+        }
+
+        function updateModelScale() {
+            const footLength = getFootLengthFromTracking(); // Panjang kaki dari pelacakan
+            const defaultFootLength = 25; // Panjang default model
+            const scaleFactor = footLength / defaultFootLength;
+
+            const modelEntity = document.querySelector('#model');
+            modelEntity.setAttribute('scale', `${scaleFactor} ${scaleFactor} ${scaleFactor}`);
+            console.log(`Model scaled to: ${scaleFactor}`);
+        }
+
+        setInterval(updateModelScale, 1000); // Update setiap 1 detik
+
+        // Peringatan jika tidak menggunakan perangkat mobile
+        if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            alert("AR hanya dapat digunakan di perangkat smartphone dengan kamera belakang.");
+        }
+
+        function goTo3D() {
+            window.location.href = "shoes.html";
+        }
+
+        // Simulasi pelacakan kaki (pengaturan placeholder untuk pelacakan lebih lanjut)
+        const footTrackingEntity = document.querySelector('#foot-tracking');
+        function updateFootTrackingPosition() {
+            footTrackingEntity.setAttribute('position', { x: 0, y: -1, z: -2 });
+            console.log("Foot tracking updated.");
+        }
+
+        setInterval(updateFootTrackingPosition, 1000); // Update posisi setiap 1 detik
+    </script>
+</body>
+</html>
