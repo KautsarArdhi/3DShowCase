@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AR Viewer</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/jeromeetienne/ar.js/aframe/build/aframe-ar.min.js"></script>
     <style>
         body {
@@ -25,6 +26,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            z-index: 10;
         }
 
         .toggle-switch {
@@ -95,12 +97,6 @@
             object-fit: cover;
         }
 
-        #ar-container {
-            width: 100%;
-            height: calc(100vh - 100px);
-            position: relative;
-        }
-
         a-scene {
             width: 100%;
             height: 100%;
@@ -116,9 +112,29 @@
         <div class="toggle-text">AR</div>
     </div>
 
-    <h1>AR Viewer</h1>
-    <p>This is a placeholder for AR functionality.</p>
+    <a-scene embedded arjs>
+        <!-- Kamera untuk AR -->
+        <a-camera position="0 0 0"></a-camera>
 
+        <!-- Pencahayaan untuk model -->
+        <a-light type="point" position="0 4 4" intensity="1"></a-light>
+
+        <!-- Model 3D yang akan dimuat -->
+        <a-entity id="model" 
+                  gltf-model="../assets/sun_glasses/sunglass2.gltf" 
+                  scale="0.1 0.1 0.1" 
+                  position="0 0 -2">
+        </a-entity>
+
+        <!-- Entitas untuk pelacakan kaki (placeholder) -->
+        <a-entity id="foot-tracking" 
+                  geometry="primitive: plane; height: 1; width: 1" 
+                  material="color: #00ff00; opacity: 0.5" 
+                  position="0 -1 0">
+        </a-entity>
+    </a-scene>
+
+    <!-- Kontrol untuk mengganti model -->
     <div id="controls">
         <input type="radio" name="model-switch" id="model1" checked>
         <label for="model1"><img src="../assets/e8609c56-d7ae-4731-afbf-8346950febab.png" alt="Model 1"></label>
@@ -133,16 +149,6 @@
         <label for="model4"><img src="../assets/4d7e9b85-2fa4-48ac-be84-664be8ebd968.png" alt="Model 4"></label>
     </div>
 
-    <div id="ar-container">
-        <a-scene embedded arjs>
-            <a-assets>
-                <a-asset-item id="current-model" src="../assets/game_ready_boot/sneaker4.gltf"></a-asset-item>
-            </a-assets>
-            <a-entity gltf-model="#current-model" position="0 0 0" scale="1 1 1"></a-entity>
-            <a-camera position="0 0 0" look-controls></a-camera>
-        </a-scene>
-    </div>
-
     <script>
         const modelData = {
             model1: '../assets/game_ready_boot/sneaker4.gltf',
@@ -151,38 +157,32 @@
             model4: '../assets/sneakerone/scene.gltf'
         };
 
-        let currentModel = 'model1';
-
-        window.onload = () => {
-            const toggleSwitch = document.getElementById('toggle-switch');
-            toggleSwitch.classList.add('active');
-
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            if (!isMobile) {
-                alert("Halaman AR harus dibuka di perangkat smartphone untuk mencoba menggunakan kamera belakang.");
-            }
-
-            document.querySelectorAll('input[name="model-switch"]').forEach(input => {
-                input.addEventListener('change', (e) => {
-                    currentModel = e.target.id;
-                    loadModel();
-                });
+        document.querySelectorAll('input[name="model-switch"]').forEach(input => {
+            input.addEventListener('change', (e) => {
+                const modelPath = modelPaths[e.target.id];
+                const entity = document.querySelector('#model');
+                entity.setAttribute('gltf-model', modelPath);
             });
-        };
+        });
 
-        function loadModel() {
-            const scene = document.querySelector('a-scene');
-            const modelEntity = scene.querySelector('a-entity[gltf-model]');
-            const modelAsset = document.getElementById('current-model');
-
-            modelAsset.setAttribute('src', modelData[currentModel]);
-            modelEntity.setAttribute('gltf-model', `#current-model`);
-            console.log(`Model updated to: ${modelData[currentModel]}`);
+        // Peringatan jika tidak menggunakan perangkat mobile
+        if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            alert("AR hanya dapat digunakan di perangkat smartphone dengan kamera belakang.");
         }
 
         function goTo3D() {
             window.location.href = "shoes.html";
         }
+
+        // Simulasi pelacakan kaki (pengaturan placeholder untuk pelacakan lebih lanjut)
+        const footTrackingEntity = document.querySelector('#foot-tracking');
+        function updateFootTrackingPosition() {
+            // Logika pelacakan kaki placeholder
+            footTrackingEntity.setAttribute('position', { x: 0, y: -1, z: -2 });
+            console.log("Foot tracking updated.");
+        }
+
+        setInterval(updateFootTrackingPosition, 1000); // Update posisi setiap 1 detik
     </script>
 </body>
 </html>
