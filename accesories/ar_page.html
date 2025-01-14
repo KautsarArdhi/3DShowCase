@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AR Viewer</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.137.5/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.137.5/examples/jsm/webxr/ARButton.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.137.5/examples/jsm/loaders/GLTFLoader.js"></script>
     <style>
         body {
             margin: 0;
@@ -24,6 +30,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            z-index: 10;
         }
 
         .toggle-switch {
@@ -88,15 +95,15 @@
         }
 
         #controls img {
-            width: 60px;
-            height: 60px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             object-fit: cover;
         }
 
-        #ar-container {
+        a-scene {
             width: 100%;
-            height: calc(100vh - 100px);
+            height: 100%;
         }
     </style>
 </head>
@@ -109,9 +116,9 @@
         <div class="toggle-text">AR</div>
     </div>
 
-    <h1>AR Viewer</h1>
-    <p>This is a placeholder for AR functionality.</p>
+    <div id="ar-container"></div>
 
+    <!-- Kontrol untuk mengganti model -->
     <div id="controls">
         <input type="radio" name="model-switch" id="model1" checked>
         <label for="model1"><img src="../assets/kacaone.jpg" alt="Model 1"></label>
@@ -127,6 +134,48 @@
     </div>
 
     <script>
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.xr.enabled = true;
+        document.getElementById('ar-container').appendChild(renderer.domElement);
+
+        // Automatically enable camera without ARButton
+defineCameraAccess();
+
+function defineCameraAccess() {
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: { exact: "environment" } } })
+        .then((stream) => {
+            const videoElement = document.createElement("video");
+            videoElement.srcObject = stream;
+            videoElement.style.position = "absolute";
+            videoElement.style.top = "0";
+            videoElement.style.left = "0";
+            videoElement.style.width = "100%";
+            videoElement.style.height = "100%";
+            videoElement.style.zIndex = "-1"; // Place it behind other elements
+            videoElement.autoplay = true;
+            document.body.appendChild(videoElement);
+
+            console.log("Camera access enabled successfully.");
+        })
+        .catch((error) => {
+            console.error("Error accessing the camera:", error);
+            alert("Failed to access the camera. Make sure the device's camera is working and allowed.");
+        });
+}
+
+        const light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
+        scene.add(light);
+
+        const geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1);
+        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+        const cube = new THREE.Mesh(geometry, material);
+        scene.add(cube);
+
+        cube.position.set(0, 0, -0.5);
+
         const modelData = {
             model1: '../assets/sun_glasses/sunglass2.gltf',
             model2: '../assets/sun_glasses_-_low_poly/sunglass3.gltf',
@@ -134,29 +183,40 @@
             model4: '../assets/cat_eye_glasses/sunglass1.gltf'
         };
 
-        let currentModel = 'model1';
+        let currentModel = null;
+        const loader = new THREE.GLTFLoader();
 
-        window.onload = () => {
-            const toggleSwitch = document.getElementById('toggle-switch');
-            toggleSwitch.classList.add('active');
-
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            if (!isMobile) {
-                alert("Halaman AR harus dibuka di perangkat smartphone untuk mencoba menggunakan kamera belakang.");
+        function loadModel(modelPath) {
+            if (currentModel) {
+                scene.remove(currentModel);
             }
 
-            document.querySelectorAll('input[name="model-switch"]').forEach(input => {
-                input.addEventListener('change', (e) => {
-                    currentModel = e.target.id;
-                    loadModel();
-                });
+            loader.load(modelPath, (gltf) => {
+                currentModel = gltf.scene;
+                currentModel.scale.set(1.5, 1.5, 1.5);
+                currentModel.position.set(0, -0.5, -1);
+                scene.add(currentModel);
+            }, undefined, (error) => {
+                console.error('An error occurred loading the model:', error);
             });
-        };
-
-        function loadModel() {
-            console.log(`Loading model: ${modelData[currentModel]}`);
-            // Implementasikan logika integrasi AR.js di sini untuk mengganti model dalam AR
         }
+
+        document.querySelectorAll('input[name="model-switch"]').forEach(input => {
+            input.addEventListener('change', (e) => {
+                const modelPath = modelData[e.target.id].path;
+                loadModel(modelPath);
+            });
+        });
+
+        loadModel(modelData.model1.path);
+
+        function animate() {
+            renderer.setAnimationLoop(() => {
+                renderer.render(scene, camera);
+            });
+        }
+
+        animate();
 
         function goTo3D() {
             window.location.href = "glasses.html";
